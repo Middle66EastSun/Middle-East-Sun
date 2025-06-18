@@ -1,189 +1,0 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خاورمیانه - بروکر نفت و گاز و پتروشیمی</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/widgets.css">
-    <link rel="stylesheet" href="css/animations.css">
-</head>
-<body>
-    <!-- هدر سایت -->
-    <header class="main-header">
-        <div class="header-container">
-            <div class="logo">
-                <h1>🛢️ خاورمیانه</h1>
-                <p>بروکر نفت و گاز و پتروشیمی</p>
-            </div>
-            <nav class="main-nav">
-                <a href="#home">خانه</a>
-                <a href="#services">خدمات</a>
-                <a href="#prices">قیمت‌ها</a>
-                <a href="#about">درباره ما</a>
-                <a href="#contact">تماس</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- بخش اصلی -->
-    <main class="main-content">
-        <!-- بنر اصلی -->
-        <section class="hero-section" id="home">
-            <div class="hero-content">
-                <h2>واسطه‌گری تخصصی در صنعت انرژی</h2>
-                <p>ما با بیش از 10 سال تجربه در زمینه تجارت نفت، گاز طبیعی و محصولات پتروشیمی، پل ارتباطی میان تولیدکنندگان و خریداران هستیم.</p>
-                <div class="hero-buttons">
-                    <button class="btn-primary" onclick="scrollToSection('services')">خدمات ما</button>
-                    <button class="btn-secondary" onclick="scrollToSection('contact')">تماس با ما</button>
-                </div>
-            </div>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <div class="stat-number" id="hero-trades">1250+</div>
-                    <div class="stat-label">معاملات موفق</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="hero-clients">180+</div>
-                    <div class="stat-label">مشتری فعال</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="hero-volume">50M+</div>
-                    <div class="stat-label">حجم معاملات (تن)</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- بخش خدمات -->
-        <section class="services-section" id="services">
-            <h2 class="section-title">خدمات ما</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">🛢️</div>
-                    <h3>تجارت نفت خام</h3>
-                    <p>خرید و فروش انواع نفت خام از معتبرترین منابع جهان با قیمت‌های رقابتی</p>
-                    <ul>
-                        <li>نفت خام سبک</li>
-                        <li>نفت خام سنگین</li>
-                        <li>کنسانتره نفتی</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">⚡</div>
-                    <h3>گاز طبیعی</h3>
-                    <p>تأمین و توزیع گاز طبیعی برای صنایع مختلف با بالاترین کیفیت</p>
-                    <ul>
-                        <li>گاز طبیعی خشک</li>
-                        <li>گاز طبیعی مرطوب</li>
-                        <li>LNG & CNG</li>
-                    </ul>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">🏭</div>
-                    <h3>محصولات پتروشیمی</h3>
-                    <p>عرضه کلیه محصولات پتروشیمی مورد نیاز صنایع پایین‌دستی</p>
-                    <ul>
-                        <li>پلی‌اتیلن و پلی‌پروپیلن</li>
-                        <li>PVC و PET</li>
-                        <li>مواد اولیه شیمیایی</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- بخش ویجت‌ها -->
-        <section class="widgets-section">
-            <div class="widgets-container">
-                <!-- ویجت قیمت‌های زنده -->
-                <div class="widget live-prices-widget">
-                    <h3 class="widget-title">📈 قیمت‌های لحظه‌ای</h3>
-                    <div class="price-ticker" id="price-ticker"></div>
-                    <div class="price-list" id="live-prices"></div>
-                </div>
-
-                <!-- ویجت درخواست قیمت -->
-                <div class="widget quote-widget">
-                    <h3 class="widget-title">💼 درخواست قیمت</h3>
-                    <form id="quote-form" class="quote-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>نوع محصول:</label>
-                                <select id="product" required>
-                                    <option value="">انتخاب کنید</option>
-                                    <option value="crude-oil-light">نفت خام سبک</option>
-                                    <option value="crude-oil-heavy">نفت خام سنگین</option>
-                                    <option value="natural-gas">گاز طبیعی</option>
-                                    <option value="lng">گاز مایع (LNG)</option>
-                                    <option value="lpg">گاز مایع (LPG)</option>
-                                    <option value="gasoline">بنزین</option>
-                                    <option value="diesel">گازوئیل</option>
-                                    <option value="fuel-oil">نفت کوره</option>
-                                    <option value="naphtha">نفتا</option>
-                                    <option value="bitumen">قیر</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>حجم (تن):</label>
-                                <input type="number" id="volume" placeholder="حداقل 1000 تن" min="1000" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>نام شرکت:</label>
-                                <input type="text" id="company" placeholder="نام شرکت یا سازمان" required>
-                            </div>
-                            <div class="form-group">
-                                <label>کشور:</label>
-                                <select id="country" required>
-                                    <option value="">انتخاب کشور</option>
-                                    <option value="IR">ایران</option>
-                                    <option value="IQ">عراق</option>
-                                    <option value="KW">کویت</option>
-                                    <option value="SA">عربستان سعودی</option>
-                                    <option value="AE">امارات</option>
-                                    <option value="QA">قطر</option>
-                                    <option value="OM">عمان</option>
-                                    <option value="BH">بحرین</option>
-                                    <option value="TR">ترکیه</option>
-                                    <option value="other">سایر</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>توضیحات اضافی:</label>
-                            <textarea id="description" placeholder="مشخصات بیشتر، زمان تحویل، شرایط پرداخت و..." rows="3"></textarea>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>نام و نام خانوادگی:</label>
-                                <input type="text" id="fullname" placeholder="نام کامل" required>
-                            </div>
-                            <div class="form-group">
-                                <label>شماره تماس:</label>
-                                <input type="tel" id="phone" placeholder="+98 912 345 6789" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>ایمیل:</label>
-                            <input type="email" id="email" placeholder="email@company.com" required>
-                        </div>
-                        <button type="submit" class="btn-submit">ارسال درخواست قیمت</button>
-                    </form>
-                </div>
-
-                <!-- ویجت ماشین حساب -->
-                <div class="widget calculator-widget">
-                    <h3 class="widget-title">🧮 ماشین حساب تجاری</h3>
-                    <div class="calculator-tabs">
-                        <button class="tab-btn active" onclick="switchTab('profit')">محاسبه سود</button>
-                        <button class="tab-btn" onclick="switchTab('conversion')">تبدیل واحد</button>
-                        <button class="tab-btn" onclick="switchTab('shipping')">هزینه حمل</button>
-                    </div>
-                    
-                    <div id="profit-tab" class="tab-content active">
-                        <div class="calc-form">
-                            <div class="form-group">
-                                <label>قیمت خرید ($/بشکه):</label>
-                                <input type="number" id="buy-price" placeholder="75.50" step="0.01">
-                            </div>
-                            <div class="form-group">
