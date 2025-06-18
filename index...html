@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">خاورمیانه - بروکر نفت و گاز و پتروشیمی</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1e3c72;
+            --secondary-color: #2a5298;
+            --accent-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-bg: rgba(255, 255, 255, 0.95);
+            --dark-text: #333;
+            --light-text: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark-text);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        body.rtl {
+            direction: rtl;
+            text-align: right;
+        }
+
+        body.ltr {
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* هدر و ناوبری */
+        .header {
+            background: var(--light-bg);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 5px;
+            background: var(--primary-color);
+            border-radius: 25px;
+            padding: 5px;
+        }
+
+        .lang-btn {
+            padding: 8px 15px;
+            border: none;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .lang-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .main-nav a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* کنتینر اصلی */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        /* ویجت‌ها */
+        .widget {
+            background: var(--light-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
+        .widget:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .widget-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .widget-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        /* قیمت‌های زنده */
+        .price-ticker {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            border-right: 5px solid var(--accent-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .rtl .price-item {
+            border-right: 5px solid var(--accent-color);
+            border-left: none;
+        }
+
+        .ltr .price-item {
+            border-left: 5px solid var(--accent-color);
+            border-right: none;
+        }
+
+        .price-item:hover {
+            background: linear-gradient(90deg, #e9ecef, #dee2e6);
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-name {
+            font-weight: bold;
+            color: var(--dark-text);
+        }
+
+        .price-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .price-change {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .positive { background: var(--accent-color); }
+        .negative { background: var(--danger-color); }
+
+        /* فرم‌ها */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+            transform: scale(1.02);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* دکمه‌ها */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(30, 60, 114, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-color), #20c997);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838, #1e7e34);
+            transform: translateY(-2px);
+        }
+
+        /* آمار */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05) rotate(1deg);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* ماشین حساب */
+        .calculator {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+
+        .calc-result {
+            background: linear-gradient(135deg, var(--accent-color), #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* اخبار */
+        .news-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 10px;
+            border-right: 4px solid var(--warning-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .rtl .news-item {
+            border-right: 4px solid var(--warning-color);
+            border-left: none;
+        }
+
+        .ltr .news-item {
+            border-left: 4px solid var(--warning-color);
+            border-right: none;
+        }
+
+        .news-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .ltr .news-item:hover {
+            transform: translateX(5px);
+        }
+
+        .news-title {
+            font-weight: bold;
+            color: var(--dark-text);
+            margin-bottom: 5px;
+        }
+
+        .news-time {
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+
+        /* رسپانسیو */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+                padding: 20px 15px;
+                gap: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+        }
+
+        /* انیمیشن‌ها */
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .widget:nth-child(1) { animation-delay: 0.1s; }
+        .widget:nth-child(2) { animation-delay: 0.2s; }
+        .widget:nth-child(3) { animation-delay: 0.3s; }
+        .widget:nth-child(4) { animation-delay: 0.4s; }
+        .widget:nth-child(5) { animation-delay: 0.5s; }
+        .widget:nth-child(6) { animation-delay: 0.6s; }
+
+        /* لودینگ */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="rtl">
+    <!-- هدر -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1>🛢️💰 <span data-translate="company-name">خاورمیانه</span></h1>
+                <div class="logo-subtitle" data-translate="company-subtitle">بروکر نفت، گاز، پتروشیمی و طلا</div>
+            </div>
+            
+            <div class="nav-controls">
+                <div class="language-switcher">
+                    <button class="lang-btn active" onclick="changeLanguage('fa')">فا</button>
+                    <button class="lang-btn" onclick="changeLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="changeLanguage('ar')">ع</button>
+                </div>
+                
+                <nav class="main-nav">
+                    <a href="#home" data-translate="nav-home">خانه</a>
+                    <a href="#services" data-translate="nav-services">خدمات</a>
+                    <a href="#prices" data-translate="nav-prices">قیمت‌ها</a>
+                    <a href="#about" data-translate="nav-about">درباره ما</a>
+                    <a href="#contact" data-translate="nav-contact">تماس</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- محتوای اصلی -->
+    <div class="container">
+        <!-- ویجت قیمت‌های زنده -->
+        <div class="widget fade-in">
+            <h3 class="widget-title">
+                📈 <span data-translate="live-prices-title">قیمت‌های لحظه‌ای</span>
+            </h3>
+            <div class="price-ticker">
+                <span data-translate="live-update">بروزرسانی زنده هر 10 ثانیه</span>
+            </div>
+            <div id="live-prices">
+                <div class="price-item" onclick="updatePrice(this)">
+                    <span class="price-name" data-translate="brent-oil">نفت خام برنت</span>
+                    <div class="price-details">
+                        <span class="price-value">$85.34</span>
+                        <span class="price-change positive">+1.2%</span>
+                    </div>
+                </div>
+                <div class="price-item" onclick="updatePrice(this)">
+                    <span class="price-name" data-translate="wti-oil">نفت خام WTI</span>
+                    <div class="price-details">
+                        <span class="price-value">$81.56</span>
+                        <span class="price-change negative">-0.8%</span>
+                    </div>
+                </div>
+                <div class="price-item" onclick="updatePrice(this)">
+                    <span class="price-name" data-translate="natural-gas">گاز طبیعی</span>
+                    <div class="price-details">
+                        <span class="price-value">$3.89</span>
+                        <span class="price-change positive">+2.1%</span>
+                    </div>
+                </div>
+                <div class="price-item" onclick="updatePrice(this)">
+                    <span class="price-name" data-translate="gasoline">بنزین</span>
+                    <div class="price-details">
+                        <span class="price-value">$2.45</span>
+                        <span class="price-change positive">+0.5%</span>
+                    </div>
+                </div>
+                <div class="price-item" onclick="updatePrice(this)">
+                    <span class="price-name" data-translate="gold-spot">طلای نقدی</span>
+                    <div class="price-details">
+                        <span class="price-value">$2,045.30</span>
+                        <span class="price-change positive">+1.8%</span>
+                    </div>
+                </div>
+                <div class="price-item" onclick="updatePrice(this)">
+                    <span class="price-name" data-translate="gold-future">طلای آتی</span>
+                    <div class="price-details">
+                        <span class="price-value">$2,052.80</span>
+                        <span class="price-change negative">-0.4%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- فرم درخواست قیمت -->
+        <div class="widget fade-in">
+            <h3 class="widget-title">
+                💼 <span data-translate
