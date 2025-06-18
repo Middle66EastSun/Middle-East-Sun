@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد پیشرفته بروکر نفت و گاز</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/font-face.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazir', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #f5f5f5;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); }
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .pulse {
+            width: 12px;
+            height: 12px;
+            background: #4ecdc4;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .widget {
+            background: rgba(255, 255, 255, 0.95);
+            color: #2c3e50;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .widget:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
+
+        .widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .widget h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .widget-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+        }
+
+        .data-box {
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            z-index: -1;
+            border-radius: 15px;
+            animation: borderGlow 2s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .price-change {
+            font-size: 1rem;
+            margin-top: 8px;
+        }
+
+        .positive { color: #27ae60; }
+        .negative { color: #e74c3c; }
+
+        button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Vazir', sans-serif;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        canvas {
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .news-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            border-right: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateX(-5px);
+        }
+
+        .news-time {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .news-title {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .market-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .status-open {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+            border-color: rgba(39, 174, 96, 0.3);
+        }
+
+        .trading-panel {
+            background: rgba(52, 73, 94, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-family: 'Vazir', sans-serif;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .trade-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .sell-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🛢️ داشبورد پیشرفته بروکر نفت و گاز 🛢️</h1>
+        <div class="live-indicator">
+            <div class="pulse"></div>
+            <span>زنده و آنلاین</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- قیمت نفت -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">🛢️</span>
+                قیمت لحظه‌ای نفت خام
+            </h2>
+            <div class="market-status status-open">
+                <span><strong>وضعیت بازار:</strong> باز</span>
+                <span id="marketTime">09:45 AM EST</span>
+            </div>
+            <div class="data-box" id="oilPriceBox">در حال بارگذاری...</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="oilHigh">0</div>
+                    <div class="stat-label">بالاترین</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="oilLow">0</div>
+                    <div class="stat-label">پایین‌ترین</div>
+                </div>
+            </div>
+            <button onclick="updateOilPrice()">به‌روزرسانی نرخ نفت</button>
+        </div>
+
+        <!-- قیمت گاز -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">🔥</span>
+                قیمت گاز طبیعی
+            </h2>
+            <div class="data-box" id="gasPriceBox">در حال بارگذاری...</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="gasHigh">0</div>
+                    <div class="stat-label">بالاترین</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="gasLow">0</div>
+                    <div class="stat-label">پایین‌ترین</div>
+                </div>
+            </div>
+            <button onclick="updateGasPrice()">به‌روزرسانی نرخ گاز</button>
+        </div>
+
+        <!-- نمودار قیمت نفت -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">📈</span>
+                نمودار تغییر قیمت نفت ۲۴ ساعت
+            </h2>
+            <canvas id="oilChart" height="200"></canvas>
+        </div>
+
+        <!-- نمودار قیمت گاز -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">📊</span>
+                نمودار تغییر قیمت گاز ۲۴ ساعت
+            </h2>
+            <canvas id="gasChart" height="200"></canvas>
+        </div>
+
+        <!-- حجم معاملات -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">💹</span>
+                حجم معاملات امروز
+            </h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="oilVolume">0</div>
+                    <div class="stat-label">نفت (میلیون بشکه)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="gasVolume">0</div>
+                    <div class="stat-label">گاز (میلیارد متر مکعب)</div>
+                </div>
+            </div>
+            <button onclick="updateVolumes()">به‌روزرسانی حجم</button>
+        </div>
+
+        <!-- پنل معاملاتی -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">💰</span>
+                پنل معاملاتی سریع
+            </h2>
+            <div class="trading-panel">
+                <label>مقدار (بشکه):</label>
+                <input type="number" id="tradeAmount" placeholder="1000" value="1000">
+                
+                <label>قیمت هدف:</label>
+                <input type="number" id="targetPrice" placeholder="85.50" step="0.01">
+                
+                <div class="trade-buttons">
+                    <button class="buy-btn" onclick="simulateTrade('خرید')">خرید</button>
+                    <button class="sell-btn" onclick="simulateTrade('فروش')">فروش</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- اخبار بازار -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">📰</span>
+                آخرین اخبار بازار
+            </h2>
+            <div id="newsContainer">
+                <div class="news-item">
+                    <div class="news-time">۱۰ دقیقه پیش</div>
+                    <div class="news-title">افزایش قیمت نفت برنت به دلیل کاهش ذخایر</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-time">۳۰ دقیقه پیش</div>
+                    <div class="news-title">تولید گاز طبیعی آمریکا به رکورد جدید رسید</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-time">۱ ساعت پیش</div>
+                    <div class="news-title">تحریم‌های جدید بر صادرات نفت تأثیر گذاشت</div>
+                </div>
+            </div>
+            <button onclick="updateNews()">اخبار جدید</button>
+        </div>
+
+        <!-- شاخص‌های مالی -->
+        <div class="widget">
+            <h2>
+                <span class="widget-icon">📋</span>
+                شاخص‌های کلیدی
+            </h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="dollarIndex">0</div>
+                    <div class="stat-label">شاخص دلار</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="goldPrice">0</div>
+                    <div class="stat-label">قیمت طلا</div>
+                </div>
+            </div>
+            <button onclick="updateIndices()">به‌روزرسانی شاخص‌ها</button>
+        </div>
+    </div>
+
+    <script>
+        // قیمت‌های اولیه
+        let oilPrice = 85 + Math.random() * 10;
+        let gasPrice = 3.2 + Math.random() * 0.8;
+        let oilHigh = oilPrice;
+        let oilLow = oilPrice;
+        let gasHigh = gasPrice;
+        let gasLow = gasPrice;
+
+        // تابع محاسبه تغییر قیمت
+        function calculateChange(current, previous) {
+            const change = current - previous;
+            const percent = ((change / previous) * 100).toFixed(2);
+            const sign = change >= 0 ? '+' : '';
+            const colorClass = change >= 0 ? 'positive' : 'negative';
+            return `<span class="${colorClass}">${sign}${change.toFixed(2)} (${sign}${percent}%)</span>`;
+        }
+
+        // به‌روزرسانی قیمت نفت
+        function updateOilPrice() {
+            const previousPrice = oilPrice;
+            oilPrice = 85 + Math.random() * 10;
+            
+            if (oilPrice > oilHigh) oilHigh = oilPrice;
+            if (oilPrice < oilLow) oilLow = oilPrice;
+            
+            document.getElementById("oilPriceBox").innerHTML = `
+                نفت برنت: $${oilPrice.toFixed(2)}
+                <div class="price-change">${calculateChange(oilPrice, previousPrice)}</div>
+            `;
+            
+            document.getElementById("oilHigh").textContent = oilHigh.toFixed(2);
+            document.getElementById("oilLow").textContent = oilLow.toFixed(2);
+            
+            addPointToChart(oilChart, oilPrice);
+        }
+
+        // به‌روزرسانی قیمت گاز
+        function updateGasPrice() {
+            const previousPrice = gasPrice;
+            gasPrice = 3.2 + Math.random() * 0.8;
+            
+            if (gasPrice > gasHigh) gasHigh = gasPrice;
+            if (gasPrice < gasLow) gasLow = gasPrice;
+            
+            document.getElementById("gasPriceBox").innerHTML = `
+                گاز طبیعی: $${gasPrice.toFixed(3)}
+                <div class="price-change">${calculateChange(gasPrice, previousPrice)}</div>
+            `;
+            
+            document.getElementById("gasHigh").textContent = gasHigh.toFixed(3);
+            document.getElementById("gasLow").textContent = gasLow.toFixed(3);
+            
+            addPointToChart(gasChart, gasPrice);
+        }
+
+        // به‌روزرسانی حجم معاملات
+        function updateVolumes() {
+            const oilVol = (50 + Math.random() * 30).toFixed(1);
+            const gasVol = (15 + Math.random() * 10).toFixed(1);
+            
+            document.getElementById("oilVolume").textContent = oilVol;
+            document.getElementById("gasVolume").textContent = gasVol;
+        }
+
+        // شبیه‌سازی معامله
+        function simulateTrade(type) {
+            const amount = document.getElementById("tradeAmount").value;
+            const targetPrice = document.getElementById("targetPrice").value;
+            
+            if (!amount || !targetPrice) {
+                alert("لطفاً تمام فیلدها را پر کنید");
+                return;
+            }
+            
+            const totalValue = (amount * targetPrice).toLocaleString();
+            alert(`${type} ${amount} بشکه به قیمت $${targetPrice}\nارزش کل: $${totalValue}\n✅ سفارش ثبت شد!`);
+        }
+
+        // به‌روزرسانی اخبار
+        function updateNews() {
+            const news = [
+                "کشف ذخایر جدید نفت در خلیج مکزیک",
+                "افزایش تقاضای گاز طبیعی در فصل زمستان",
+                "توافق کاهش تولید نفت در اوپک",
+                "سرمایه‌گذاری جدید در انرژی‌های تجدیدپذیر",
+                "رشد صادرات گاز طبیعی مایع",
+                "تحلیل‌گران پیش‌بینی افزایش قیمت کردند"
+            ];
+            
+            const container = document.getElementById("newsContainer");
+            container.innerHTML = "";
+            
+            for (let i = 0; i < 3; i++) {
+                const randomNews = news[Math.floor(Math.random() * news.length)];
+                const time = Math.floor(Math.random() * 60) + 1;
+                
+                container.innerHTML += `
+                    <div class="news-item">
+                        <div class="news-time">${time} دقیقه پیش</div>
+                        <div class="news-title">${randomNews}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // به‌روزرسانی شاخص‌ها
+        function updateIndices() {
+            const dollarIndex = (102 + Math.random() * 5).toFixed(2);
+            const goldPrice = (1950 + Math.random() * 100).toFixed(0);
+            
+            document.getElementById("dollarIndex").textContent = dollarIndex;
+            document.getElementById("goldPrice").textContent = `$${goldPrice}`;
+        }
+
+        // نمودارها
+        const oilLabels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+        const oilData = Array.from({ length: 24 }, () => (80 + Math.random() * 15).toFixed(2));
+
+        const gasLabels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+        const gasData = Array.from({ length: 24 }, () => (3 + Math.random() * 1.5).toFixed(3));
+
+        // نمودار نفت
+        const oilCtx = document.getElementById('oilChart').getContext('2d');
+        const oilChart = new Chart(oilCtx, {
+            type: 'line',
+            data: {
+                labels: oilLabels,
+                datasets: [{
+                    label: 'قیمت نفت (USD)',
+                    data: oilData,
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: { family: 'Vazir' }
+                        }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
+        });
+
+        // نمودار گاز
+        const gasCtx = document.getElementById('gasChart').getContext('2d');
+        const gasChart = new Chart(gasCtx, {
+            type: 'line',
+            data: {
+                labels: gasLabels,
+                datasets: [{
+                    label: 'قیمت گاز (USD)',
+                    data: gasData,
+                    borderColor: '#4ecdc4',
+                    backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: { family: 'Vazir' }
+                        }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
+        });
+
+        // اضافه کردن نقطه به نمودار
+        function addPointToChart(chart, newPrice) {
+            const now = new Date();
+            const timeLabel = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            chart.data.labels.push(timeLabel);
+            chart.data.datasets[0].data.push(newPrice.toFixed(chart === gasChart ? 3 : 2));
+            
+            if (chart.data.labels.length > 24) {
+                chart.data.labels.shift();
+                chart.data.datasets[0].data.shift();
+            }
+            chart.update();
+        }
+
+        // به‌روزرسانی زمان
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: true,
+                timeZone: 'America/New_York'
+            });
+            document.getElementById("marketTime").textContent = timeString + " EST";
+        }
+
+        // به‌روزرسانی خودکار هر 5 ثانیه
+        setInterval(() => {
+            if (Math.random() > 0.7) updateOilPrice();
+            if (Math.random() > 0.8) updateGasPrice();
+            updateTime();
+        }, 5000);
+
+        // بارگذاری اولیه
+        updateOilPrice();
+        updateGasPrice();
+        updateVolumes();
+        updateIndices();
+        updateTime();
+    </script>
+
+</body>
+</html> 
