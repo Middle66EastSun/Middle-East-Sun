@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middle East Sun - بروکر تخصصی نفت، گاز و طلا</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tahoma', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* صفحه اصلی - منوی کارت‌ها */
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+
+        .menu-card:hover::before {
+            animation: shine 0.5s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(-100%) rotate(45deg); opacity: 0; }
+        }
+
+        .menu-card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .menu-card h3 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #FFD700;
+        }
+
+        .menu-card p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .analysis-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+        }
+
+        /* صفحات داخلی */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .back-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .price-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .price-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .price-item.positive {
+            border-color: #00ff88;
+        }
+
+        .price-item.negative {
+            border-color: #ff4444;
+        }
+
+        .price-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .positive .price-value {
+            color: #00ff88;
+        }
+
+        .negative .price-value {
+            color: #ff4444;
+        }
+
+        .price-change {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .trading-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-buy {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+        }
+
+        .btn-sell {
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+            color: #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart-container {
+            height: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-right: 4px solid #FFD700;
+        }
+
+        .news-time {
+            color: #FFD700;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-online {
+            background: #00ff88;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .main-menu {
+                grid-template-columns: 1fr;
+            }
+            
+            .trading-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🛢️ Middle East Sun ⭐</h1>
+            <p>بروکر تخصصی نفت، گاز طبیعی، پتروشیمی و طلا</p>
+            <p>🌐 middle66eastsun.github.io/Middle-East-Sun</p>
+            <p>وضعیت بازار: آنلاین <span class="status-indicator status-online"></span></p>
+        </header>
+
+        <!-- صفحه اصلی -->
+        <div id="homepage" class="page active">
+            <div class="main-menu">
+                <div class="menu-card" onclick="showPage('dashboard')">
+                    <span class="menu-card-icon">🏠</span>
+                    <h3>داشبورد اصلی</h3>
+                    <p>مشاهده کلی بازار و قیمت‌های لحظه‌ای</p>
+                </div>
+
+                <div class="menu-card" onclick="showPage('oil-gas')">
+                    <span class="menu-card-icon">🛢️</span>
+                    <h3>نفت و گاز</h3>
+                    <p>معاملات نفت خام، گاز طبیعی و فرآورده‌ها</p>
+                </div>
+
+                <div class="menu-card" onclick="showPage('gold-metals')">
+                    <span class="menu-card-icon">🥇</span>
+                    <h3>طلا و فلزات</h3>
+                    <p>خرید و فروش طلا، نقره و فلزات گرانبها</p>
+                </div>
+
+                <div class="menu-card" onclick="showPage('petrochemical')">
+                    <span class="menu-card-icon">🏭</span>
+                    <h3>پتروشیمی</h3>
+                    <p>محصولات پتروشیمی و مواد اولیه</p>
+                </div>
+
+                <div class="menu-card analysis-card" onclick="showPage('analysis')">
+                    <span class="menu-card-icon">📊</span>
+                    <h3>تحلیل بازار</h3>
+                    <p>گزارش‌ها، نمودارها و تحلیل‌های تخصصی بازار کالا</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه داشبورد اصلی -->
+        <div id="dashboard" class="page">
+            <button class="back-button" onclick="showPage('homepage')">🔙 بازگشت به صفحه اصلی</button>
+            
+            <div class="card">
+                <h3>💰 قیمت‌های لحظه‌ای</h3>
+                <div class="price-display">
+                    <div class="price-item positive">
+                        <div class="price-label">نفت خام برنت</div>
+                        <div class="price-value">$84.25</div>
+                        <div class="price-change">+1.2% (+$0.98)</div>
+                    </div>
+                    <div class="price-item negative">
+                        <div class="price-label">گاز طبیعی</div>
+                        <div class="price-value">$2.45</div>
+                        <div class="price-change">-0.8% (-$0.02)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">طلا - اونس</div>
+                        <div class="price-value">$2,032</div>
+                        <div class="price-change">+0.5% (+$10.2)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">اتیلن</div>
+                        <div class="price-value">$1,125</div>
+                        <div class="price-change">+1.8% (+$20)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 آمار کلی بازار</h3>
+                <p><strong>حجم معاملات امروز:</strong> $2.4 میلیارد</p>
+                <p><strong>تعداد معاملات فعال:</strong> 15,420</p>
+                <p><strong>بازارهای فعال:</strong> نفت، گاز، طلا، پتروشیمی</p>
+                <p><strong>آخرین به‌روزرسانی:</strong> الان</p>
+            </div>
+        </div>
+
+        <!-- صفحه نفت و گاز -->
+        <div id="oil-gas" class="page">
+            <button class="back-button" onclick="showPage('homepage')">🔙 بازگشت به صفحه اصلی</button>
+            
+            <div class="card">
+                <h3>🛢️ بازار نفت و گاز</h3>
+                <div class="price-display">
+                    <div class="price-item positive">
+                        <div class="price-label">نفت خام برنت</div>
+                        <div class="price-value">$84.25</div>
+                        <div class="price-change">+1.2% (+$0.98)</div>
+                    </div>
+                    <div class="price-item negative">
+                        <div class="price-label">نفت خام WTI</div>
+                        <div class="price-value">$79.80</div>
+                        <div class="price-change">-0.5% (-$0.40)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">گاز طبیعی</div>
+                        <div class="price-value">$2.45</div>
+                        <div class="price-change">+0.3% (+$0.01)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">نفت گاز</div>
+                        <div class="price-value">$385</div>
+                        <div class="price-change">+2.1% (+$8)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trading-panel">
+                <div class="card">
+                    <h3>🛒 پنل خرید</h3>
+                    <form>
+                        <div class="form-group">
+                            <label>نوع محصول:</label>
+                            <select>
+                                <option>نفت خام برنت</option>
+                                <option>نفت خام WTI</option>
+                                <option>گاز طبیعی</option>
+                                <option>نفت گاز</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>مقدار (بشکه):</label>
+                            <input type="number" placeholder="مثال: 1000">
+                        </div>
+                        <div class="form-group">
+                            <label>قیمت هدف ($):</label>
+                            <input type="number" placeholder="مثال: 84.50" step="0.01">
+                        </div>
+                        <button type="submit" class="btn btn-buy">✅ ثبت سفارش خرید</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>💸 پنل فروش</h3>
+                    <form>
+                        <div class="form-group">
+                            <label>نوع محصول:</label>
+                            <select>
+                                <option>نفت خام برنت</option>
+                                <option>نفت خام WTI</option>
+                                <option>گاز طبیعی</option>
+                                <option>نفت گاز</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>مقدار (بشکه):</label>
+                            <input type="number" placeholder="مثال: 500">
+                        </div>
+                        <div class="form-group">
+                            <label>قیمت هدف ($):</label>
+                            <input type="number" placeholder="مثال: 85.00" step="0.01">
+                        </div>
+                        <button type="submit" class="btn btn-sell">❌ ثبت سفارش فروش</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه طلا و فلزات -->
+        <div id="gold-metals" class="page">
+            <button class="back-button" onclick="showPage('homepage')">🔙 بازگشت به صفحه اصلی</button>
+            
+            <div class="card">
+                <h3>🥇 بازار طلا و فلزات گرانبها</h3>
+                <div class="price-display">
+                    <div class="price-item positive">
+                        <div class="price-label">طلا - اونس</div>
+                        <div class="price-value">$2,032</div>
+                        <div class="price-change">+0.5% (+$10.2)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">طلا - کیلو</div>
+                        <div class="price-value">۷۵,۲۴۰,۰۰۰ ﷼</div>
+                        <div class="price-change">+0.3% (+۲۲۵,۷۲۰)</div>
+                    </div>
+                    <div class="price-item negative">
+                        <div class="price-label">نقره - اونس</div>
+                        <div class="price-value">$24.85</div>
+                        <div class="price-change">-1.2% (-$0.30)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">پلاتین - اونس</div>
+                        <div class="price-value">$1,045</div>
+                        <div class="price-change">+1.8% (+$18.5)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 نمودار قیمت طلا</h3>
+                <div class="chart-container">
+                    <canvas id="goldChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+
+            <div class="trading-panel">
+                <div class="card">
+                    <h3>🛒 خرید فلزات گرانبها</h3>
+                    <form>
+                        <div class="form-group">
+                            <label>نوع فلز:</label>
+                            <select>
+                                <option>طلا - اونس</option>
+                                <option>طلا - کیلو</option>
+                                <option>نقره - اونس</option>
+                                <option>پلاتین - اونس</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>مقدار:</label>
+                            <input type="number" placeholder="مقدار مورد نظر">
+                        </div>
+                        <button type="submit" class="btn btn-buy">💰 خرید</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>💸 فروش فلزات گرانبها</h3>
+                    <form>
+                        <div class="form-group">
+                            <label>نوع فلز:</label>
+                            <select>
+                                <option>طلا - اونس</option>
+                                <option>طلا - کیلو</option>
+                                <option>نقره - اونس</option>
+                                <option>پلاتین - اونس</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>مقدار:</label>
+                            <input type="number" placeholder="مقدار مورد نظر">
+                        </div>
+                        <button type="submit" class="btn btn-sell">💸 فروش</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه پتروشیمی -->
+        <div id="petrochemical" class="page">
+            <button class="back-button" onclick="showPage('homepage')">🔙 بازگشت به صفحه اصلی</button>
+            
+            <div class="card">
+                <h3>🏭 محصولات پتروشیمی</h3>
+                <div class="price-display">
+                    <div class="price-item positive">
+                        <div class="price-label">اتیلن</div>
+                        <div class="price-value">$1,125</div>
+                        <div class="price-change">+1.8% (+$20)</div>
+                    </div>
+                    <div class="price-item negative">
+                        <div class="price-label">پروپیلن</div>
+                        <div class="price-value">$985</div>
+                        <div class="price-change">-0.5% (-$5)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">بنزن</div>
+                        <div class="price-value">$1,340</div>
+                        <div class="price-change">+2.3% (+$30)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">متانول</div>
+                        <div class="price-value">$420</div>
+                        <div class="price-change">+1.1% (+$4.6)</div>
+                    </div>
+                    <div class="price-item negative">
+                        <div class="price-label">اوره</div>
+                        <div class="price-value">$285</div>
+                        <div class="price-change">-1.2% (-$3.5)</div>
+                    </div>
+                    <div class="price-item positive">
+                        <div class="price-label">PVC</div>
+                        <div class="price-value">$875</div>
+                        <div class="price-change">+0.8% (+$7)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 تولید و صادرات</h3>
+                <p><strong>ظرفیت تولید روزانه:</strong> 12,500 تن</p>
+                <p><strong>صادرات این ماه:</strong> 285,000 تن</p>
+                <p><strong>بازارهای هدف:</strong> اروپا، آسیا، خاورمیانه</p>
+                <p><strong>کیفیت محصولات:</strong> استاندارد بین‌المللی</p>
+            </div>
+        </div>
+
+        <!-- صفحه تحلیل بازار -->
+        <div id="analysis" class="page">
+            <button class="back-button" onclick="showPage('homepage')">🔙 بازگشت به صفحه اصلی</button>
+            
+            <div class="card">
+                <h3>📊 تحلیل جامع بازار</h3>
+                <div class="chart-container">
+                    <canvas id="analysisChart" width="800" height="300"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 روند قیمت‌ها</h3>
+                <div class="news-item">
+                    <div class="news-time">تحلیل هفتگی</div>
+                    <div>نفت برنت در حال حرکت صعودی - انتظار رسیدن به $87 تا پایان هفته</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-time">پیش‌بینی ماهانه</div>
+                    <div>طلا در محدوده $2000-2100 نوسان خواهد کرد</div>
+                </div>
+                <div class="news-item">
+                    <div class="news-time">تحلیل پتروشیمی</div>
+                    <div>تقاضای جهانی برای اتیلن و پروپیلن در حال افزایش</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🌍 تحلیل بازارهای جهانی</h3>
+                <p><strong>آمریکا:</strong> رشد 2.3% در قیمت نفت WTI</p>
+                <p><strong>اروپا:</strong> افزایش تقاضا برای گاز طبیعی</p>
+                <p><strong>آسیا:</strong> رشد واردات طلا و پتروشیمی</p>
+                <p><strong>خاورمیانه:</strong> ثبات در تولید و صادرات</p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 Middle East Sun - تمامی حقوق محفوظ است</p>
+            <p>🔒 معاملات امن | 📞 پشتیبانی 24/7 | 🌐 middle66eastsun.github.io/Middle-East-Sun</p>
+        </footer>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // مخفی کردن همه صفحات
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // نمایش صفحه انتخاب شده
+            document.getElementById(pageId).classList.add('active');
+            
+            // اسکرول به بالای صفحه
+            window.scrollTo(0, 0);
+        }
+
+        // شبیه‌سازی نمودار برای صفحه طلا
+        function drawGoldChart() {
+            const canvas = document.getElementById('goldChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // رسم محورها
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+            
+            // خطوط افقی
+            for (let i = 0; i < 6; i++) {
+                const y = (canvas.height / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            // رسم نمودار طلا
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            for (let i = 0; i < 24; i++) {
+                const x = (canvas.width / 24) * i;
+                const baseY = canvas.height / 2;
+                const variation = Math.sin(i * 0.3) * 40 + Math.random() * 20 - 10;
+                const y = baseY + variation;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+        }
+
+        // شبیه‌
