@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middle East Sun ⭐</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazir', 'Tahoma', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .main-page {
+            display: block;
+        }
+
+        .content-page {
+            display: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .market-analysis {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+        }
+
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 20px;
+            color: #333;
+            min-height: 300px;
+        }
+
+        .back-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .back-btn:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sample-content {
+            line-height: 1.8;
+        }
+
+        .sample-content h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        .sample-content h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+        }
+
+        .sample-content ul {
+            margin: 15px 0;
+            padding-right: 20px;
+        }
+
+        .sample-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #fff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* نمایش وضعیت آنلاین */
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-indicator.offline {
+            background: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+
+            .status-indicator {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+        }
+
+        /* اضافه کردن انیمیشن fade */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- نمایش وضعیت آنلاین -->
+    <div class="status-indicator" id="statusIndicator">
+        🟢 آنلاین
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>⭐ Middle East Sun 🌅</h1>
+            <p>بروز ترین تحلیل‌های نفت، گاز و طلا</p>
+            <p>middleeastsun.github.io/Middle-East-Sun ©</p>
+            <p>وبسایت بورس آنلاین ☀</p>
+        </div>
+
+        <!-- Loading Animation -->
+        <div class="loading" id="loadingDiv">
+            <div class="spinner"></div>
+            <p>در حال بارگذاری...</p>
+        </div>
+
+        <!-- صفحه اصلی -->
+        <div id="main-page" class="main-page">
+            <div class="grid">
+                <div class="card" onclick="showPage('oil-gas')" tabindex="0" role="button" aria-label="نفت و گاز">
+                    <span class="card-icon">🛢️</span>
+                    <h3>نفت و گاز</h3>
+                    <p>تحلیلات بازار نفت، گاز طبیعی و درآمدها</p>
+                </div>
+
+                <div class="card" onclick="showPage('dashboard')" tabindex="0" role="button" aria-label="داشبورد اصلی">
+                    <span class="card-icon">🏠</span>
+                    <h3>داشبورد اصلی</h3>
+                    <p>مشاهده کلیدی بازار و ویجت‌های تحلیلی</p>
+                </div>
+
+                <div class="card" onclick="showPage('updates')" tabindex="0" role="button" aria-label="بروزرسانی‌ها">
+                    <span class="card-icon">📋</span>
+                    <h3>بروزرسانی‌ها</h3>
+                    <p>محتویات جدید، بروزرسانی و اطلاعیه‌ها</p>
+                </div>
+
+                <div class="card" onclick="showPage('gold-currency')" tabindex="0" role="button" aria-label="طلا و ارز">
+                    <span class="card-icon">🏆</span>
+                    <h3>طلا و ارز</h3>
+                    <p>خرید و فروش طلا، نرخ ارز و کریپتو</p>
+                </div>
+
+                <div class="card market-analysis" onclick="showPage('market-analysis')" tabindex="0" role="button" aria-label="تحلیل بازار">
+                    <span class="card-icon">📊</span>
+                    <h3>تحلیل بازار</h3>
+                    <p>گزارش‌های کالا و تحلیل‌های تخصصی بازار</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه نفت و گاز -->
+        <div id="oil-gas" class="content-page">
+            <div class="content-area">
+                <button class="back-btn" onclick="showPage('main')" aria-label="بازگشت به صفحه اصلی">← بازگشت به صفحه اصلی</button>
+                <div class="sample-content">
+                    <h2>🛢️ تحلیل بازار نفت و گاز</h2>
+                    <p>به بخش تحلیل نفت و گاز خوش آمدید. در اینجا آخرین اطلاعات و تحلیل‌های بازار انرژی را مشاهده می‌کنید.</p>
+                    
+                    <h3>📈 قیمت‌های روز</h3>
+                    <ul>
+                        <li>نفت خام برنت: $85.20 (+2.1%)</li>
+                        <li>نفت خام WTI: $79.45 (+1.8%)</li>
+                        <li>گاز طبیعی: $3.12 (+0.5%)</li>
+                    </ul>
+
+                    <h3>📊 تحلیل تکنیکال</h3>
+                    <p>بازار نفت امروز با روند صعودی مواجه بوده است. عوامل موثر بر این افزایش عبارتند از:</p>
+                    <ul>
+                        <li>کاهش ذخایر نفتی آمریکا</li>
+                        <li>افزایش تقاضای جهانی</li>
+                        <li>تنش‌های ژئوپولیتیک در منطقه</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه داشبورد -->
+        <div id="dashboard" class="content-page">
+            <div class="content-area">
+                <button class="back-btn" onclick="showPage('main')" aria-label="بازگشت به صفحه اصلی">← بازگشت به صفحه اصلی</button>
+                <div class="sample-content">
+                    <h2>🏠 داشبورد اصلی</h2>
+                    <p>به داشبورد اصلی سیستم خوش آمدید.</p>
+                    
+                    <h3>📋 ابزارهای تحلیلی</h3>
+                    <ul>
+                        <li>نمودار قیمت‌های لحظه‌ای</li>
+                        <li>تحلیل‌گر تکنیکال پیشرفته</li>
+                        <li>اخبار مؤثر بر بازار</li>
+                        <li>هشدارهای قیمتی</li>
+                    </ul>
+
+                    <h3>⚡ عملکرد سیستم</h3>
+                    <p>تمامی سیستم‌ها عملکرد مطلوب دارند و اطلاعات به‌روزرسانی می‌شوند.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه بروزرسانی‌ها -->
+        <div id="updates" class="content-page">
+            <div class="content-area">
+                <button class="back-btn" onclick="showPage('main')" aria-label="بازگشت به صفحه اصلی">← بازگشت به صفحه اصلی</button>
+                <div class="sample-content">
+                    <h2>📋 آخرین بروزرسانی‌ها</h2>
+                    
+                    <h3>🆕 تغییرات اخیر</h3>
+                    <ul>
+                        <li><strong>27 ژوئن 2025:</strong> اضافه شدن بخش تحلیل کریپتوکارنسی</li>
+                        <li><strong>25 ژوئن 2025:</strong> بهبود رابط کاربری داشبورد</li>
+                        <li><strong>23 ژوئن 2025:</strong> اضافه شدن هشدارهای قیمتی</li>
+                    </ul>
+
+                    <h3>🔜 بروزرسانی‌های آینده</h3>
+                    <ul>
+                        <li>سیستم پیش‌بینی هوش مصنوعی</li>
+                        <li>اپلیکیشن موبایل</li>
+                        <li>ربات تلگرام</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه طلا و ارز -->
+        <div id="gold-currency" class="content-page">
+            <div class="content-area">
+                <button class="back-btn" onclick="showPage('main')" aria-label="بازگشت به صفحه اصلی">← بازگشت به صفحه اصلی</button>
+                <div class="sample-content">
+                    <h2>🏆 بازار طلا و ارز</h2>
+                    
+                    <h3>💰 قیمت‌های لحظه‌ای</h3>
+                    <ul>
+                        <li>طلای جهانی: $2,340 (-0.3%)</li>
+                        <li>سکه تمام: 45,200,000 ریال</li>
+                        <li>نیم سکه: 23,800,000 ریال</li>
+                        <li>ربع سکه: 13,500,000 ریال</li>
+                    </ul>
+
+                    <h3>💱 نرخ ارز</h3>
+                    <ul>
+                        <li>دلار آمریکا: 52,450 ریال</li>
+                        <li>یورو: 57,200 ریال</li>
+                        <li>درهم امارات: 14,280 ریال</li>
+                    </ul>
+
+                    <h3>₿ کریپتوکارنسی</h3>
+                    <ul>
+                        <li>بیت کوین: $67,320 (+1.2%)</li>
+                        <li>اتریوم: $3,450 (+2.1%)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه تحلیل بازار -->
+        <div id="market-analysis" class="content-page">
+            <div class="content-area">
+                <button class="back-btn" onclick="showPage('main')" aria-label="بازگشت به صفحه اصلی">← بازگشت به صفحه اصلی</button>
+                <div class="sample-content">
+                    <h2>📊 تحلیل جامع بازار</h2>
+                    
+                    <h3>📈 وضعیت کلی بازارها</h3>
+                    <p>بازارهای مالی امروز با نوسانات متوسط مواجه بوده‌اند. شاخص‌های اصلی عملکرد مثبتی داشته‌اند.</p>
+
+                    <h3>🎯 نکات کلیدی</h3>
+                    <ul>
+                        <li>روند صعودی بازار انرژی ادامه دارد</li>
+                        <li>طلا در محدوده مقاومتی قرار گرفته</li>
+                        <li>ارز دیجیتال با نوسان مثبت همراه است</li>
+                        <li>بازار سهام منطقه‌ای ثبات نشان می‌دهد</li>
+                    </ul>
+
+                    <h3>⚠️ هشدارها و توصیه‌ها</h3>
+                    <ul>
+                        <li>مراقب نوسانات ارزی باشید</li>
+                        <li>سطوح مقاومت طلا را زیر نظر داشته باشید</li>
+                        <li>اخبار ژئوپولیتیک را پیگیری کنید</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>تحلیل جامع بازارها - Middle East Sun 2025 ©</p>
+            <p>middleeastsun.github.io/Middle-East-Sun © | 24/7 پشتیبانی آنلاین</p>
+            <p>📱 مطالعات کامل | ⭐ پایان آنالیز ☀</p>
+        </div>
+    </div>
+
+    <script>
+        // تابع نمایش صفحات با انیمیشن
+        function showPage(pageId) {
+            // نمایش لودینگ
+            const loadingDiv = document.getElementById('loadingDiv');
+            loadingDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                // مخفی کردن همه صفحات
+                const allPages = document.querySelectorAll('.main-page, .content-page');
+                allPages.forEach(page => {
+                    page.style.display = 'none';
+                });
+                
+                // نمایش صفحه انتخاب شده
+                let targetPage;
+                if (pageId === 'main') {
+                    targetPage = document.getElementById('main-page');
+                } else {
+                    targetPage = document.getElementById(pageId);
+                }
+                
+                if (targetPage) {
+                    targetPage.style.display = 'block';
+                    targetPage.classList.add('fade-in');
+                }
+                
+                // مخفی کردن لودینگ
+                loadingDiv.style.display = 'none';
+                
+                // لاگ کردن تعویض صفحه
+                console.log(`صفحه ${pageId} نمایش داده شد`);
+            }, 300);
+        }
+        
+        // پشتیبانی از کیبورد
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                const focusedElement = document.activeElement;
+                if (focusedElement.classList.contains('card')) {
+                    focusedElement.click();
+                }
+            }
+        });
+        
+        // بررسی وضعیت اتصال
+        function updateConnectionStatus() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            if (navigator.onLine) {
+                statusIndicator.textContent = '🟢 آنلاین';
+                statusIndicator.classList.remove('offline');
+            } else {
+                statusIndicator.textContent = '🔴 آفلاین';
+                statusIndicator.classList.add('offline');
+            }
+        }
+        
+        // Event listeners for online/offline status
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        
+        // تست کردن JavaScript
+        console.log('وب‌سایت Middle East Sun آماده است!');
+        console.log('نسخه بهبود یافته با ویژگی‌های جدید');
+        
+        // اطمینان از اینکه صفحه اصلی نمایش داده شود
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('main');
+            updateConnectionStatus();
+            console.log('صفحه اصلی نمایش داده شد');
+        });
+        
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            const loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
+            console.log(`زمان بارگذاری صفحه: ${loadTime}ms`);
+        });
+    </script>
+</body>
+</html>
