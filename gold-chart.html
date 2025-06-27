@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang='fa' dir='rtl'><head><meta charset='UTF-8'>
+<title>Middle East Sun - نسخه گرافیکی</title>
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<style>
+body{font-family:sans-serif;background:#fefefe;color:#222;padding:2em;line-height:1.8}
+h1{color:#2c3e50;text-align:center}
+.lang-switch{text-align:center;margin-bottom:1em}
+.lang-switch a{margin:0 1em;text-decoration:none;color:#007bff}
+canvas{background:#fff;padding:1em;border:1px solid #ccc;border-radius:10px}
+</style></head>
+<body>
+<div class='lang-switch'>
+<a href='index.html'>🇮🇷 فارسی</a>
+<a href='index-en.html'>🇬🇧 English</a>
+<a href='index-ar.html'>🇸🇦 العربیة</a>
+</div>
+<h1>📊 نمودار قیمت طلا (نمایشی)</h1>
+<canvas id='goldChart' width='600' height='300'></canvas>
+<script>
+const ctx = document.getElementById('goldChart').getContext('2d');
+const goldChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه'],
+        datasets: [{
+            label: 'قیمت طلا ۱۸ عیار (ریال)',
+            data: [4500000, 4520000, 4480000, 4550000, 4600000, 4620000],
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            borderColor: '#f39c12',
+            borderWidth: 3,
+            tension: 0.3,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: false }
+        }
+    }
+});
+</script>
+
+<h2>🚀 آماده برای اتصال به API</h2>
+<p>این صفحه آماده اتصال به API قیمت زنده طلا یا نفت است. فقط کافیست URL API اضافه شود.</p>
+
+<h2>🌐 چندزبانه و PWA آماده</h2>
+<p>ساختار برای زبان‌های فارسی، عربی و انگلیسی تعبیه شده است. با فایل manifest.json و service-worker می‌توان نسخه PWA تولید کرد.</p>
+
+<a href='index.html'>← بازگشت</a>
+</body></html>
