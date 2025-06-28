@@ -140,3 +140,27 @@ footer {
   border-top: 1px solid #eee;
   font-size: 13px;
 }
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 20px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .status {
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+
+  footer {
+    font-size: 12px;
+    padding: 12px;
+  }
+}
