@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang='fa' dir='rtl'><head><meta charset='UTF-8'>
+ج<!DOCTYPE html><html lang='fa' dir='rtl'><head><meta charset='UTF-8'>
 <title>تحلیل بازار طلا</title><style>body{font-family:sans-serif;background:#fff5f5;padding:2em}
 h1{color:#d35400}ul{line-height:1.7}</style></head>
 <body><h1>🏆 تحلیل بازار طلا</h1>
@@ -85,4 +85,51 @@ h1{color:#d35400}ul{line-height:1.7}</style></head>
         align-self: flex-start;
         text-align: left;
     }
-      </style></html>
+      </style>// متغیرهای مربوط به ربات چت
+const chatBody = document.getElementById("chatbot-body");
+const chatInput = document.getElementById("chatbot-input");
+
+// تابع ارسال پیام
+function sendChatMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    appendMessage("user", message);
+    chatInput.value = "";
+
+    // شبیه‌سازی پاسخ ربات
+    setTimeout(() => {
+        const response = getBotResponse(message);
+        appendMessage("bot", response);
+    }, 800);
+}
+
+// نمایش پیام در باکس چت
+function appendMessage(role, text) {
+    const msgDiv = document.createElement("div");
+    msgDiv.className = role;
+    msgDiv.textContent = text;
+    chatBody.appendChild(msgDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// پاسخ هوشمندانه به سوالات
+function getBotResponse(input) {
+    input = input.toLowerCase();
+
+    if (input.includes("سلام") || input.includes("درود")) {
+        return "سلام! چطور می‌تونم کمک کنم؟";
+    } else if (input.includes("نفت") || input.includes("گاز")) {
+        return "در مورد نفت و گاز چه سوالی دارید؟ ما خدمات واسطه‌گری در حوزه نفت، گاز و پتروشیمی ارائه می‌دهیم.";
+    } else if (input.includes("طلا")) {
+        return "در مورد معامله طلا چه کمکی از دستم برمیاد؟";
+    } else if (input.includes("تماس") || input.includes("تلفن")) {
+        return "برای تماس با ما، لطفاً به صفحه 'تماس با ما' بروید یا اینجا [لینک] را کلیک کنید.";
+    } else if (input.includes("خدمات")) {
+        return "ما خدمات واسطه‌گری در حوزه‌های نفت و گاز، پتروشیمی و طلا ارائه می‌دهیم.";
+    } else if (input.includes("قیمت")) {
+        return "جهت استعلام قیمت لطفاً با بخش فروش ما تماس بگیرید یا درخواست خود را ثبت کنید.";
+    } else {
+        return "متاسفانه سوال شما را متوجه نشدم. لطفاً دقیق‌تر توضیح دهید یا سوال دیگری بپرسید.";
+    }
+}</html>
