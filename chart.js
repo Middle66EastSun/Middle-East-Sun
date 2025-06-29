@@ -520,5 +520,45 @@
             document.getElementById('stopBtn').disabled = true;
         });
     </script>
-</body>
+</body>function sendChatMessage() {
+    const input = document.getElementById("chatbot-input");
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage("user", message);
+    input.value = "";
+
+    // شبیه‌سازی پاسخ ربات
+    setTimeout(() => {
+        const response = getBotResponse(message);
+        appendMessage("bot", response);
+    }, 800);
+}
+
+function appendMessage(role, text) {
+    const body = document.getElementById("chatbot-body");
+    const div = document.createElement("div");
+    div.className = role;
+    div.textContent = text;
+    body.appendChild(div);
+    body.scrollTop = body.scrollHeight;
+}
+
+function getBotResponse(input) {
+    input = input.toLowerCase();
+
+    if (input.includes("سلام") || input.includes("درود")) {
+        return "سلام! چطور می‌تونم کمک کنم؟";
+    } else if (input.includes("نفت") || input.includes("گاز")) {
+        return "در مورد نفت و گاز چه سوالی دارید؟ می‌تونید درباره نوع معامله، شرایط یا نحوه شروع سوال کنید.";
+    } else if (input.includes("طلا")) {
+        return "در مورد معامله طلا چه کمکی از دستم برمیاد؟";
+    } else if (input.includes("تماس") || input.includes("تلفن")) {
+        return "برای تماس با ما، لطفاً به صفحه 'تماس با ما' بروید یا اینجا [لینک] را کلیک کنید.";
+    } else if (input.includes("خدمات")) {
+        return "ما خدمات واسطه‌گری در حوزه‌های نفت و گاز، پتروشیمی و طلا ارائه می‌دهیم.";
+    } else {
+        return "متاسفانه سوال شما را متوجه نشدم. لطفاً دقیق‌تر توضیح دهید یا سوال دیگری بپرسید.";
+    }
+}
 </html>
