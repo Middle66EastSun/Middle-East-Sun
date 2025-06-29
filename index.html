@@ -1,114 +1,162 @@
-<!DOCTYPE html><html lang='fa' dir='rtl'><head><meta charset='UTF-8'>
-<title>صفحه اصلی - Middle East Sun</title>
-<style>body{font-family:sans-serif;background:#f0f0f0;color:#222;padding:2em}
-a{color:#007bff;text-decoration:none;margin:0 1em}a:hover{text-decoration:underline}
-.lang-switch{margin-bottom:1em}</style></head>
-<body><div class='lang-switch'>
-<a href='index.html'>🇮🇷 فارسی</a>
-<a href='index-en.html'>🇬🇧 English</a>
-<a href='index-ar.html'>🇸🇦 العربیة</a></div>
-<h1>⭐ Middle East Sun 🌅</h1>
-<p>مرکز تحلیل انرژی، پتروشیمی، طلا و بازار جهانی</p>
-<ul>
-<li><a href='oil-gas.html'>نفت و گاز</a></li>
-<li><a href='petrochemical.html'>پتروشیمی</a></li>
-<li><a href='gold.html'>طلا</a></li>
-<li><a href='market-analysis.html'>تحلیل بازار</a></li>
-</ul></body><!-- اضافه کردن در آخر فایل index.html -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>Middle East Sun</title>
+    <style>
+        /* اسلایدر */
+        .slider {
+            width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        /* ربات چت */
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ccc;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            font-family: Tahoma, sans-serif;
+        }
+        #chatbot-header {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        #chatbot-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        #chatbot-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        #chatbot-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .user, .bot {
+            padding: 8px;
+            border-radius: 5px;
+            max-width: 80%;
+            margin-bottom: 5px;
+        }
+        .user {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+            text-align: right;
+        }
+        .bot {
+            background-color: #f8d7da;
+            align-self: flex-start;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<!-- اسلایدر -->
+<div class="slider" id="mySlider"></div>
+
+<script>
+    // اسلایدر تصاویر
+    const images = [
+        'url("slide1.jpg")',
+        'url("slide2.jpg")',
+        'url("slide3.jpg")'
+    ];
+
+    let currentIndex = 0;
+    const slider = document.getElementById('mySlider');
+
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % images.length;
+        slider.style.backgroundImage = images[currentIndex];
+    }, 3000);
+
+    slider.style.backgroundImage = images[0];
+</script>
+
+<!-- AI Chatbot -->
 <div id="chatbot-container">
     <div id="chatbot-header">ربات پشتیبانی</div>
     <div id="chatbot-body"></div>
-    <input type="text" id="chatbot-input" placeholder="سوال خود را بنویسید..." />
-    <button onclick="sendChatMessage()">ارسال</button>
+    <div id="chatbot-input-area">
+        <input type="text" id="chatbot-input" placeholder="سوال خود را بنویسید..." />
+        <button onclick="sendChatMessage()">ارسال</button>
+    </div>
 </div>
 
-<style>
-#chatbot-container {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 300px;
-    height: 400px;
-    border: 1px solid #ccc;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    display: flex;
-    flex-direction: column;
-}
-#chatbot-header {
-    background: #007bff;
-    color: white;
-    padding: 10px;
-    text-align: center;
-}
-#chatbot-body {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px;
-}
-#chatbot-input {
-    padding: 8px;
-    border-top: 1px solid #ccc;
-}
-button {
-    padding: 8px;
-    background: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-.user, .bot {
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 5px;
-}
-.user { background: #d4edda; margin-left: 20%; }
-.bot { background: #f8d7da; margin-right: 20%; }
-</style>// متغیرهای مربوط به ربات چت
-const chatBody = document.getElementById("chatbot-body");
-const chatInput = document.getElementById("chatbot-input");
+<script>
+    function sendChatMessage() {
+        const input = document.getElementById("chatbot-input");
+        const message = input.value.trim();
+        if (!message) return;
 
-// تابع ارسال پیام
-function sendChatMessage() {
-    const message = chatInput.value.trim();
-    if (!message) return;
+        appendMessage("user", message);
+        input.value = "";
 
-    appendMessage("user", message);
-    chatInput.value = "";
-
-    // شبیه‌سازی پاسخ ربات
-    setTimeout(() => {
-        const response = getBotResponse(message);
-        appendMessage("bot", response);
-    }, 800);
-}
-
-// نمایش پیام در باکس چت
-function appendMessage(role, text) {
-    const msgDiv = document.createElement("div");
-    msgDiv.className = role;
-    msgDiv.textContent = text;
-    chatBody.appendChild(msgDiv);
-    chatBody.scrollTop = chatBody.scrollHeight;
-}
-
-// پاسخ هوشمندانه به سوالات
-function getBotResponse(input) {
-    input = input.toLowerCase();
-
-    if (input.includes("سلام") || input.includes("درود")) {
-        return "سلام! چطور می‌تونم کمک کنم؟";
-    } else if (input.includes("نفت") || input.includes("گاز")) {
-        return "در مورد نفت و گاز چه سوالی دارید؟ ما خدمات واسطه‌گری در حوزه نفت، گاز و پتروشیمی ارائه می‌دهیم.";
-    } else if (input.includes("طلا")) {
-        return "در مورد معامله طلا چه کمکی از دستم برمیاد؟";
-    } else if (input.includes("تماس") || input.includes("تلفن")) {
-        return "برای تماس با ما، لطفاً به صفحه 'تماس با ما' بروید یا اینجا [لینک] را کلیک کنید.";
-    } else if (input.includes("خدمات")) {
-        return "ما خدمات واسطه‌گری در حوزه‌های نفت و گاز، پتروشیمی و طلا ارائه می‌دهیم.";
-    } else if (input.includes("قیمت")) {
-        return "جهت استعلام قیمت لطفاً با بخش فروش ما تماس بگیرید یا درخواست خود را ثبت کنید.";
-    } else {
-        return "متاسفانه سوال شما را متوجه نشدم. لطفاً دقیق‌تر توضیح دهید یا سوال دیگری بپرسید.";
+        setTimeout(() => {
+            const response = getBotResponse(message);
+            appendMessage("bot", response);
+        }, 800);
     }
-}</html>
+
+    function appendMessage(role, text) {
+        const body = document.getElementById("chatbot-body");
+        const div = document.createElement("div");
+        div.className = role;
+        div.textContent = text;
+        body.appendChild(div);
+        body.scrollTop = body.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+        input = input.toLowerCase();
+
+        if (input.includes("سلام") || input.includes("درود")) {
+            return "سلام! چطور می‌تونم کمک کنم؟";
+        } else if (input.includes("نفت") || input.includes("گاز")) {
+            return "در مورد نفت و گاز چه سوالی دارید؟ ما خدمات واسطه‌گری در حوزه نفت، گاز و پتروشیمی ارائه می‌دهیم.";
+        } else if (input.includes("طلا")) {
+            return "در مورد معامله طلا چه کمکی از دستم برمیاد؟";
+        } else if (input.includes("تماس") || input.includes("تلفن")) {
+            return "برای تماس با ما، لطفاً به صفحه 'تماس با ما' بروید یا اینجا [لینک] را کلیک کنید.";
+        } else if (input.includes("خدمات")) {
+            return "ما خدمات واسطه‌گری در حوزه‌های نفت و گاز، پتروشیمی و طلا ارائه می‌دهیم.";
+        } else if (input.includes("قیمت")) {
+            return "جهت استعلام قیمت لطفاً با بخش فروش ما تماس بگیرید یا درخواست خود را ثبت کنید.";
+        } else {
+            return "متاسفانه سوال شما را متوجه نشدم. لطفاً دقیق‌تر توضیح دهید یا سوال دیگری بپرسید.";
+        }
+    }
+</script>
+
+</body>
+</html>
